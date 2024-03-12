@@ -32,6 +32,9 @@ public class User
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Role> roles;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<WorkSession> workSessions;
+
     public int getId()
     {
         return id;
@@ -100,5 +103,15 @@ public class User
     public void setRoles(List<Role> roles)
     {
         this.roles = roles;
+    }
+
+    public List<WorkSession> getWorkSessions()
+    {
+        return workSessions;
+    }
+
+    public void setWorkSessions(List<WorkSession> workSessions)
+    {
+        this.workSessions = workSessions;
     }
 }
