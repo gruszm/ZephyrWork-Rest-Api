@@ -2,6 +2,8 @@ package pl.gruszm.ZephyrWork.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User
@@ -26,6 +28,9 @@ public class User
 
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Role> roles;
 
     public int getId()
     {
@@ -85,5 +90,15 @@ public class User
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
+    }
+
+    public List<Role> getRoles()
+    {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles)
+    {
+        this.roles = roles;
     }
 }
