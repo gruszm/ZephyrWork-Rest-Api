@@ -3,6 +3,7 @@ package pl.gruszm.ZephyrWork.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "work_sessions")
@@ -22,6 +23,9 @@ public class WorkSession
 
     @Column(name = "end_time")
     private LocalDateTime endTime;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "workSession")
+    private List<Location> locations;
 
     public int getId()
     {
@@ -61,5 +65,15 @@ public class WorkSession
     public void setEndTime(LocalDateTime endTime)
     {
         this.endTime = endTime;
+    }
+
+    public List<Location> getLocations()
+    {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations)
+    {
+        this.locations = locations;
     }
 }
