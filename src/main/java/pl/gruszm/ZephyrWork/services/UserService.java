@@ -32,9 +32,7 @@ public class UserService
 
     public User save(User user)
     {
-        User savedUser = userRepository.save(user);
-
-        return savedUser;
+        return userRepository.save(user);
     }
 
     public User deleteUserById(int id)
