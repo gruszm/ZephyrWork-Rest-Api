@@ -13,10 +13,6 @@ public class Location
     @Column(name = "id")
     private int id;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "work_session_id", referencedColumnName = "id")
-    private WorkSession workSession;
-
     @Column(name = "location_time")
     private LocalDateTime locationTime;
 
@@ -25,6 +21,10 @@ public class Location
 
     @Column(name = "longitude")
     private float longitude;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "work_session_id", referencedColumnName = "id")
+    private WorkSession workSession;
 
     public int getId()
     {

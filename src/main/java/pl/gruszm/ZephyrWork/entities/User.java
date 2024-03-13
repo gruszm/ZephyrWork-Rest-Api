@@ -13,10 +13,6 @@ public class User
     @Column(name = "id")
     private int id;
 
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
-    private User supervisor;
-
     @Column(name = "email", unique = true)
     private String email;
 
@@ -28,6 +24,10 @@ public class User
 
     @Column(name = "last_name")
     private String lastName;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
+    private User supervisor;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Role> roles;

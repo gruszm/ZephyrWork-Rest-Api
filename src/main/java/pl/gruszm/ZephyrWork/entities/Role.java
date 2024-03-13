@@ -11,12 +11,12 @@ public class Role
     @Column(name = "id")
     private int id;
 
+    @Column(name = "role_name")
+    private String roleName;
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(name = "role_name")
-    private String roleName;
 
     public int getId()
     {
