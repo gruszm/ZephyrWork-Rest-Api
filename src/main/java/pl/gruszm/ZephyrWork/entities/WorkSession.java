@@ -74,11 +74,6 @@ public class WorkSession
         return locations;
     }
 
-    public void setLocations(List<Location> locations)
-    {
-        this.locations = locations;
-    }
-
     public void addLocation(Location location)
     {
         if (locations == null)

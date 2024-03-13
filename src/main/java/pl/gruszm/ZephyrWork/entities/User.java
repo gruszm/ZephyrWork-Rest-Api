@@ -103,19 +103,9 @@ public class User
         return roles;
     }
 
-    public void setRoles(List<Role> roles)
-    {
-        this.roles = roles;
-    }
-
     public List<WorkSession> getWorkSessions()
     {
         return workSessions;
-    }
-
-    public void setWorkSessions(List<WorkSession> workSessions)
-    {
-        this.workSessions = workSessions;
     }
 
     public void addRole(Role role)
