@@ -3,6 +3,8 @@ package pl.gruszm.ZephyrWork.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -75,5 +77,27 @@ public class WorkSession
     public void setLocations(List<Location> locations)
     {
         this.locations = locations;
+    }
+
+    public void addLocation(Location location)
+    {
+        if (locations == null)
+        {
+            locations = new ArrayList<>();
+        }
+
+        location.setWorkSession(this);
+        locations.add(location);
+    }
+
+    public void addLocations(Location ... locations)
+    {
+        if (this.locations == null)
+        {
+            this.locations = new ArrayList<>();
+        }
+
+        Arrays.stream(locations).forEach(l -> l.setWorkSession(this));
+        this.locations.addAll(Arrays.stream(locations).toList());
     }
 }

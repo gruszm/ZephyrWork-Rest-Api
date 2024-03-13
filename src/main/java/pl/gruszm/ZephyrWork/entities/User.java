@@ -2,6 +2,9 @@ package pl.gruszm.ZephyrWork.entities;
 
 import jakarta.persistence.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -113,5 +116,49 @@ public class User
     public void setWorkSessions(List<WorkSession> workSessions)
     {
         this.workSessions = workSessions;
+    }
+
+    public void addRole(Role role)
+    {
+        if (roles == null)
+        {
+            roles = new ArrayList<>();
+        }
+
+        role.setUser(this);
+        roles.add(role);
+    }
+
+    public void addRoles(Role ... roles)
+    {
+        if (this.roles == null)
+        {
+            this.roles = new ArrayList<>();
+        }
+
+        Arrays.stream(roles).forEach(r -> r.setUser(this));
+        this.roles.addAll(Arrays.stream(roles).toList());
+    }
+
+    public void addWorkSession(WorkSession workSession)
+    {
+        if (workSessions == null)
+        {
+            workSessions = new ArrayList<>();
+        }
+
+        workSession.setUser(this);
+        workSessions.add(workSession);
+    }
+
+    public void addWorkSessions(WorkSession ... workSessions)
+    {
+        if (this.workSessions == null)
+        {
+            this.workSessions = new ArrayList<>();
+        }
+
+        Arrays.stream(workSessions).forEach(ws -> ws.setUser(this));
+        this.workSessions.addAll(Arrays.stream(workSessions).toList());
     }
 }
