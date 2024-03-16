@@ -29,7 +29,7 @@ public class WorkSessionController
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<WorkSession> getWorkSessionById(@PathVariable("id") int id, @RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
@@ -65,7 +65,7 @@ public class WorkSessionController
         return ResponseEntity.ok(workSession);
     }
 
-    @GetMapping("/token")
+    @GetMapping("/user/token")
     public ResponseEntity<List<WorkSession>> getWorkSessionsByToken(@RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
@@ -100,7 +100,7 @@ public class WorkSessionController
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<WorkSession> deleteWorkSession(@PathVariable("id") int id)
     {
         WorkSession workSession = workSessionService.deleteById(id);

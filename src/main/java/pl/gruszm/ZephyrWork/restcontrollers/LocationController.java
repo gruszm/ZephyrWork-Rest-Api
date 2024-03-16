@@ -29,7 +29,7 @@ public class LocationController
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Location> getLocationById(@PathVariable("id") int id, @RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
@@ -111,7 +111,7 @@ public class LocationController
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Location> deleteLocation(@PathVariable("id") int id)
     {
         Location location = locationService.deleteById(id);

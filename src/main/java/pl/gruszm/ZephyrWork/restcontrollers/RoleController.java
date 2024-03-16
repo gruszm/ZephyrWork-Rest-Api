@@ -55,7 +55,7 @@ public class RoleController
         }
     }
 
-    @GetMapping("/user/{email}")
+    @GetMapping("/user/email/{email}")
     public ResponseEntity<List<Role>> getRoleByUserEmail(@PathVariable("email") String email)
     {
         List<Role> roles = roleService.findByUserEmail(email);
@@ -80,7 +80,7 @@ public class RoleController
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Role> deleteRole(@PathVariable("id") int id)
     {
         Role role = roleService.deleteById(id);
