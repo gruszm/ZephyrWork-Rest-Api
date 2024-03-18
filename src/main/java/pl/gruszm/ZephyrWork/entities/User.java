@@ -1,5 +1,6 @@
 package pl.gruszm.ZephyrWork.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -27,15 +28,26 @@ public class User
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "has_active_work_session", nullable = false)
+    private boolean hasActiveWorkSession;
+
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private User supervisor;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Role> roles;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<WorkSession> workSessions;
+
+    public User()
+    {
+        this.hasActiveWorkSession = false;
+    }
 
     public int getId()
     {
@@ -95,6 +107,16 @@ public class User
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
+    }
+
+    public boolean hasActiveWorkSession()
+    {
+        return hasActiveWorkSession;
+    }
+
+    public void setActiveWorkSession(boolean hasActiveWorkSession)
+    {
+        this.hasActiveWorkSession = hasActiveWorkSession;
     }
 
     public List<Role> getRoles()

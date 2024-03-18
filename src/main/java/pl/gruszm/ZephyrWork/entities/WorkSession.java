@@ -1,5 +1,6 @@
 package pl.gruszm.ZephyrWork.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -22,12 +23,19 @@ public class WorkSession
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "workSession")
     private List<Location> locations;
+
+    public WorkSession()
+    {
+        startTime = LocalDateTime.now();
+    }
 
     public int getId()
     {
