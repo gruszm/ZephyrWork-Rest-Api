@@ -28,6 +28,11 @@ public class Location
     @JoinColumn(name = "work_session_id", referencedColumnName = "id")
     private WorkSession workSession;
 
+    public Location()
+    {
+        this.locationTime = LocalDateTime.now();
+    }
+
     public int getId()
     {
         return id;
