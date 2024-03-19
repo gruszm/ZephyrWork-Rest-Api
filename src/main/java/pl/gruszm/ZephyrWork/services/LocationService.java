@@ -1,9 +1,13 @@
 package pl.gruszm.ZephyrWork.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.gruszm.ZephyrWork.entities.Location;
+import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.repostitories.LocationRepository;
+import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,11 +16,13 @@ import java.util.Optional;
 public class LocationService
 {
     private LocationRepository locationRepository;
+    private WorkSessionRepository workSessionRepository;
 
     @Autowired
-    public LocationService(LocationRepository locationRepository)
+    public LocationService(LocationRepository locationRepository, WorkSessionRepository workSessionRepository)
     {
         this.locationRepository = locationRepository;
+        this.workSessionRepository = workSessionRepository;
     }
 
     public Location findById(int id)
@@ -31,9 +37,33 @@ public class LocationService
         return locationRepository.findByWorkSessionId(id);
     }
 
-    public Location save(Location location)
+    public Location saveLocationForUser(String email)
     {
-        return locationRepository.save(location);
+        // Get the most recent work session
+        List<WorkSession> workSessions = workSessionRepository.findByUserEmail(email,
+                PageRequest.of(0, 1, Sort.by("startTime").descending()));
+        WorkSession workSession;
+        Location location, savedWorkSession;
+
+        if (workSessions.isEmpty())
+        {
+            return null;
+        }
+
+        workSession = workSessions.get(0);
+
+        // Check, if the work session is active
+        if (workSession.getEndTime() != null)
+        {
+            return null;
+        }
+
+        location = new Location();
+        location.setWorkSession(workSession);
+
+        savedWorkSession = locationRepository.save(location);
+
+        return savedWorkSession;
     }
 
     public Location deleteById(int id)

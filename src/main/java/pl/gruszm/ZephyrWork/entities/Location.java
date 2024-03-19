@@ -25,7 +25,7 @@ public class Location
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "work_session_id", referencedColumnName = "id")
+    @JoinColumn(name = "work_session_id", referencedColumnName = "id", nullable = false)
     private WorkSession workSession;
 
     public Location()

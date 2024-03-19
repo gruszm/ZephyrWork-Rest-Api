@@ -94,12 +94,22 @@ public class LocationController
         return ResponseEntity.ok(locationList);
     }
 
-    @PostMapping
-    public ResponseEntity<Location> saveLocation(@RequestBody Location location)
+    @PostMapping("/token")
+    public ResponseEntity<Location> saveLocationForUser(@RequestHeader("Auth") String jwt)
     {
-        Location savedLocation = locationService.save(location);
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        Location location;
 
-        if (savedLocation == null)
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        location = locationService.saveLocationForUser(userDetails.getEmail());
+
+        if (location == null)
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -107,7 +117,7 @@ public class LocationController
         }
         else
         {
-            return ResponseEntity.ok(savedLocation);
+            return ResponseEntity.ok(location);
         }
     }
 
