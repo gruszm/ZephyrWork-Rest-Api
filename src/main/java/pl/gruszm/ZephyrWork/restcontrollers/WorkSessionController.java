@@ -83,12 +83,22 @@ public class WorkSessionController
         return ResponseEntity.ok(workSessions);
     }
 
-    @PostMapping
-    public ResponseEntity<WorkSession> saveWorkSession(@RequestBody WorkSession workSession)
+    @PostMapping("/start")
+    public ResponseEntity<WorkSession> startWorkSession(@RequestHeader("Auth") String jwt)
     {
-        WorkSession savedWorkSession = workSessionService.save(workSession);
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        WorkSession workSession;
 
-        if (savedWorkSession == null)
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        workSession = workSessionService.startWorkSessionForUser(userDetails.getEmail());
+
+        if (workSession == null)
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -96,7 +106,34 @@ public class WorkSessionController
         }
         else
         {
-            return ResponseEntity.ok(savedWorkSession);
+            return ResponseEntity.ok(workSession);
+        }
+    }
+
+    @PostMapping("/stop")
+    public ResponseEntity<WorkSession> endWorkSession(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        WorkSession workSession;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        workSession = workSessionService.stopWorkSessionForUser(userDetails.getEmail());
+
+        if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity.ok(workSession);
         }
     }
 

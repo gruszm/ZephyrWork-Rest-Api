@@ -7,10 +7,10 @@ import pl.gruszm.ZephyrWork.config.TokenConfig;
 
 @SpringBootApplication
 @EnableConfigurationProperties(TokenConfig.class)
-public class ZephyrWorkApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(ZephyrWorkApplication.class, args);
-	}
-
+public class ZephyrWorkApplication
+{
+    public static void main(String[] args)
+    {
+        SpringApplication.run(ZephyrWorkApplication.class, args);
+    }
 }
