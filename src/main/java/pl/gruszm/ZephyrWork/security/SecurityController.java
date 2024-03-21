@@ -52,4 +52,21 @@ public class SecurityController
                     .body(null);
         }
     }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity.ok(null);
+        }
+    }
 }
