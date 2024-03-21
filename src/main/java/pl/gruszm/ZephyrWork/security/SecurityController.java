@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.services.UserService;
 
@@ -53,6 +50,23 @@ public class SecurityController
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(null);
+        }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity.ok(null);
         }
     }
 }
