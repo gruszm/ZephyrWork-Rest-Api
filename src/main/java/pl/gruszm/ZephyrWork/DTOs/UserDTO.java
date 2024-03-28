@@ -11,7 +11,7 @@ public class UserDTO
     private String email;
     private String firstName;
     private String lastName;
-    private int supervisorId;
+    private Integer supervisorId;
     private List<String> roles;
 
     public String getEmail()
@@ -19,9 +19,11 @@ public class UserDTO
         return email;
     }
 
-    public void setEmail(String email)
+    public UserDTO setEmail(String email)
     {
         this.email = email;
+
+        return this;
     }
 
     public String getFirstName()
@@ -29,9 +31,11 @@ public class UserDTO
         return firstName;
     }
 
-    public void setFirstName(String firstName)
+    public UserDTO setFirstName(String firstName)
     {
         this.firstName = firstName;
+
+        return this;
     }
 
     public String getLastName()
@@ -39,19 +43,23 @@ public class UserDTO
         return lastName;
     }
 
-    public void setLastName(String lastName)
+    public UserDTO setLastName(String lastName)
     {
         this.lastName = lastName;
+
+        return this;
     }
 
-    public int getSupervisorId()
+    public Integer getSupervisorId()
     {
         return supervisorId;
     }
 
-    public void setSupervisorId(int supervisorId)
+    public UserDTO setSupervisorId(Integer supervisorId)
     {
         this.supervisorId = supervisorId;
+
+        return this;
     }
 
     public List<String> getRoles()
@@ -59,7 +67,7 @@ public class UserDTO
         return roles;
     }
 
-    public void addRoles(Role ... roles)
+    public UserDTO addRoles(Role ... roles)
     {
         if (this.roles == null)
         {
@@ -67,5 +75,7 @@ public class UserDTO
         }
 
         this.roles.addAll(Arrays.stream(roles).map(r -> r.getRoleName()).toList());
+
+        return this;
     }
 }
