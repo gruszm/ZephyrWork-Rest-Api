@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.gruszm.ZephyrWork.DTOs.LocationDTO;
 import pl.gruszm.ZephyrWork.entities.Location;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.repostitories.LocationRepository;
@@ -37,7 +38,7 @@ public class LocationService
         return locationRepository.findByWorkSessionId(id);
     }
 
-    public Location saveLocationForUser(String email)
+    public Location saveLocationForUser(String email, LocationDTO locationDTO)
     {
         // Get the most recent work session
         List<WorkSession> workSessions = workSessionRepository.findByUserEmail(email,
@@ -59,6 +60,9 @@ public class LocationService
         }
 
         location = new Location();
+        location.setLocationTime(locationDTO.getLocationTime());
+        location.setLatitude(locationDTO.getLatitude());
+        location.setLongitude(locationDTO.getLongitude());
         location.setWorkSession(workSession);
 
         savedWorkSession = locationRepository.save(location);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.gruszm.ZephyrWork.DTOs.LocationDTO;
 import pl.gruszm.ZephyrWork.entities.Location;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
@@ -95,7 +96,7 @@ public class LocationController
     }
 
     @PostMapping("/token")
-    public ResponseEntity<Location> saveLocationForUser(@RequestHeader("Auth") String jwt)
+    public ResponseEntity<Location> saveLocationForUser(@RequestHeader("Auth") String jwt, @RequestBody LocationDTO locationDTO)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         Location location;
@@ -107,7 +108,7 @@ public class LocationController
                     .build();
         }
 
-        location = locationService.saveLocationForUser(userDetails.getEmail());
+        location = locationService.saveLocationForUser(userDetails.getEmail(), locationDTO);
 
         if (location == null)
         {
