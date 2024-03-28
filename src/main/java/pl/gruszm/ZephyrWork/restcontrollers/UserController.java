@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.gruszm.ZephyrWork.DTOs.UserDTO;
+import pl.gruszm.ZephyrWork.entities.Role;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
@@ -24,10 +26,11 @@ public class UserController
     }
 
     @GetMapping("/token")
-    public ResponseEntity<User> getUserByEmail(@RequestHeader("Auth") String jwt)
+    public ResponseEntity<UserDTO> getUserByToken(@RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         User user;
+        UserDTO userDTO;
 
         if (userDetails == null)
         {
@@ -38,7 +41,14 @@ public class UserController
 
         user = userService.findByEmail(userDetails.getEmail());
 
-        return ResponseEntity.ok(user);
+        userDTO = new UserDTO()
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
+                .setEmail(user.getEmail())
+                .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
+                .addRoles(user.getRoles().toArray(new Role[0]));
+
+        return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping
