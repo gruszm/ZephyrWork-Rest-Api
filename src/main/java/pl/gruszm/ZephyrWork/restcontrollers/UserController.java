@@ -51,6 +51,40 @@ public class UserController
         return ResponseEntity.ok(userDTO);
     }
 
+    @GetMapping("/supervisor/token")
+    public ResponseEntity<UserDTO> getSupervisorByToken(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User user, supervisor;
+        UserDTO supervisorDTO;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        user = userService.findByEmail(userDetails.getEmail());
+
+        if (user.getSupervisor() == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+
+        supervisor = user.getSupervisor();
+
+        supervisorDTO = new UserDTO()
+                .setFirstName(supervisor.getFirstName())
+                .setLastName(supervisor.getLastName())
+                .setEmail(supervisor.getEmail())
+                .setSupervisorId((supervisor.getSupervisor() != null) ? supervisor.getSupervisor().getId() : null);
+
+        return ResponseEntity.ok(supervisorDTO);
+    }
+
     @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody User user)
     {
