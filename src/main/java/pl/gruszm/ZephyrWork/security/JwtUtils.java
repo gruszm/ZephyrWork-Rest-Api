@@ -28,7 +28,6 @@ public class JwtUtils
         return JWT.create()
                 .withSubject("UserDetails")
                 .withClaim("userEmail", userEmail)
-                .withArrayClaim("userRoles", roles.toArray(new String[0]))
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (tokenConfig.getExpirationTimeSeconds() * 1000)))
                 .sign(Algorithm.HMAC512(tokenConfig.getSecret()));
@@ -47,7 +46,7 @@ public class JwtUtils
 
             DecodedJWT jwt = verifier.verify(token);
 
-            UserDetails ud = new UserDetails(jwt.getClaim("userEmail").asString(), jwt.getClaim("userRoles").asList(String.class));
+            UserDetails ud = new UserDetails(jwt.getClaim("userEmail").asString());
 
             return ud;
         }
