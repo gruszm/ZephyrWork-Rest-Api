@@ -80,7 +80,7 @@ public class UserController
                 .setFirstName(supervisor.getFirstName())
                 .setLastName(supervisor.getLastName())
                 .setEmail(supervisor.getEmail())
-                .setSupervisorId(supervisor.getSupervisor().getId());
+                .setSupervisorId(supervisor.getId());
 
         return ResponseEntity.ok(supervisorDTO);
     }
