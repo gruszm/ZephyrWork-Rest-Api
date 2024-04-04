@@ -1,46 +1,44 @@
 package pl.gruszm.ZephyrWork.DTOs;
 
-import java.time.LocalDateTime;
-
 public class LocationDTO
 {
-    private LocalDateTime locationTime;
-    private float latitude;
-    private float longitude;
+    private String locationTimeAsString;
+    private double latitude;
+    private double longitude;
 
-    public LocationDTO(LocalDateTime locationTime, float latitude, float longitude)
+    public LocationDTO(String locationTimeAsString, float latitude, float longitude)
     {
-        this.locationTime = locationTime;
+        this.locationTimeAsString = locationTimeAsString;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public LocalDateTime getLocationTime()
+    public String getLocationTimeAsString()
     {
-        return locationTime;
+        return locationTimeAsString;
     }
 
-    public void setLocationTime(LocalDateTime locationTime)
+    public void setLocationTimeAsString(String locationTimeAsString)
     {
-        this.locationTime = locationTime;
+        this.locationTimeAsString = locationTimeAsString;
     }
 
-    public float getLatitude()
+    public double getLatitude()
     {
         return latitude;
     }
 
-    public void setLatitude(float latitude)
+    public void setLatitude(double latitude)
     {
         this.latitude = latitude;
     }
 
-    public float getLongitude()
+    public double getLongitude()
     {
         return longitude;
     }
 
-    public void setLongitude(float longitude)
+    public void setLongitude(double longitude)
     {
         this.longitude = longitude;
     }

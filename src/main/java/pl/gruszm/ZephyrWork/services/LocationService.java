@@ -10,6 +10,8 @@ import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.repostitories.LocationRepository;
 import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,7 @@ public class LocationService
                 PageRequest.of(0, 1, Sort.by("startTime").descending()));
         WorkSession workSession;
         Location location, savedWorkSession;
+        LocalDateTime locationTime;
 
         if (workSessions.isEmpty())
         {
@@ -59,8 +62,17 @@ public class LocationService
             return null;
         }
 
+        try
+        {
+            locationTime = LocalDateTime.parse(locationDTO.getLocationTimeAsString());
+        }
+        catch (DateTimeParseException e)
+        {
+            return null;
+        }
+
         location = new Location();
-        location.setLocationTime(locationDTO.getLocationTime());
+        location.setLocationTime(locationTime);
         location.setLatitude(locationDTO.getLatitude());
         location.setLongitude(locationDTO.getLongitude());
         location.setWorkSession(workSession);
