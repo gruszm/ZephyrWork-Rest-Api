@@ -18,10 +18,10 @@ public class Location
     private LocalDateTime locationTime;
 
     @Column(name = "latitude")
-    private float latitude;
+    private double latitude;
 
     @Column(name = "longitude")
-    private float longitude;
+    private double longitude;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -63,22 +63,22 @@ public class Location
         this.locationTime = locationTime;
     }
 
-    public float getLatitude()
+    public double getLatitude()
     {
         return latitude;
     }
 
-    public void setLatitude(float latitude)
+    public void setLatitude(double latitude)
     {
         this.latitude = latitude;
     }
 
-    public float getLongitude()
+    public double getLongitude()
     {
         return longitude;
     }
 
-    public void setLongitude(float longitude)
+    public void setLongitude(double longitude)
     {
         this.longitude = longitude;
     }
