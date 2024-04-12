@@ -19,6 +19,21 @@ public class Avatar
     @Column(name = "image", columnDefinition = "BLOB")
     private byte[] image;
 
+    @Column(name = "image_content_type")
+    private String contentType;
+
+    public Avatar()
+    {
+
+    }
+
+    public Avatar(User user, byte[] image, String contentType)
+    {
+        this.user = user;
+        this.image = image;
+        this.contentType = contentType;
+    }
+
     public int getId()
     {
         return id;
@@ -47,5 +62,15 @@ public class Avatar
     public void setImage(byte[] image)
     {
         this.image = image;
+    }
+
+    public String getContentType()
+    {
+        return contentType;
+    }
+
+    public void setContentType(String contentType)
+    {
+        this.contentType = contentType;
     }
 }
