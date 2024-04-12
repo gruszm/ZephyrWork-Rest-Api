@@ -16,7 +16,7 @@ public class Avatar
     private User user;
 
     @Lob
-    @Column(name = "image", columnDefinition = "BLOB")
+    @Column(name = "image", columnDefinition = "MEDIUMBLOB")
     private byte[] image;
 
     @Column(name = "image_content_type")

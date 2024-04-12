@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.gruszm.ZephyrWork.entities.Avatar;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.repostitories.AvatarRepository;
+import pl.gruszm.ZephyrWork.repostitories.UserRepository;
 
 import java.io.IOException;
 
@@ -14,15 +15,24 @@ import java.io.IOException;
 public class AvatarService
 {
     private AvatarRepository avatarRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public AvatarService(AvatarRepository avatarRepository)
+    public AvatarService(AvatarRepository avatarRepository, UserRepository userRepository)
     {
         this.avatarRepository = avatarRepository;
+        this.userRepository = userRepository;
     }
 
-    public Avatar updateAvatarForUser(User user, MultipartFile file)
+    public Avatar updateAvatarForUser(String email, MultipartFile file)
     {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+        {
+            return null;
+        }
+
         // Check, if the file is an image
         String fileContentType = file.getContentType();
 
@@ -56,14 +66,29 @@ public class AvatarService
         return null;
     }
 
-    public Avatar getAvatarByUser(User user)
+    public Avatar getAvatarByUser(String email)
     {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+        {
+            return null;
+        }
+
         return user.getAvatar();
     }
 
-    public Avatar deleteAvatarForUser(User user)
+    public Avatar deleteAvatarForUser(String email)
     {
-        Avatar avatar = user.getAvatar();
+        User user = userRepository.findByEmail(email);
+        Avatar avatar;
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        avatar = user.getAvatar();
 
         if (avatar == null)
         {

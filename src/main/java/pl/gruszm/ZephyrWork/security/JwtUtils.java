@@ -46,9 +46,9 @@ public class JwtUtils
 
             DecodedJWT jwt = verifier.verify(token);
 
-            UserDetails ud = new UserDetails(jwt.getClaim("userEmail").asString());
+            UserDetails userDetails = new UserDetails(jwt.getClaim("userEmail").asString());
 
-            return ud;
+            return userDetails;
         }
         catch (JWTVerificationException e)
         {
