@@ -40,6 +40,9 @@ public class User
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<WorkSession> workSessions;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Avatar avatar;
+
     public User()
     {
         this.hasActiveWorkSession = false;
@@ -167,5 +170,15 @@ public class User
 
         Arrays.stream(workSessions).forEach(ws -> ws.setUser(this));
         this.workSessions.addAll(Arrays.stream(workSessions).toList());
+    }
+
+    public Avatar getAvatar()
+    {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar)
+    {
+        this.avatar = avatar;
     }
 }
