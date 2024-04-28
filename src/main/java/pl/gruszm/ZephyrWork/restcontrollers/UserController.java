@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
-import pl.gruszm.ZephyrWork.entities.Role;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
@@ -46,7 +45,7 @@ public class UserController
                 .setLastName(user.getLastName())
                 .setEmail(user.getEmail())
                 .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
-                .addRoles(user.getRoles().toArray(new Role[0]));
+                .setRoleName(user.getRole().getRoleType().name());
 
         return ResponseEntity.ok(userDTO);
     }

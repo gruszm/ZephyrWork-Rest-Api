@@ -34,8 +34,9 @@ public class User
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private User supervisor;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Role> roles;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<WorkSession> workSessions;
@@ -118,36 +119,9 @@ public class User
         this.hasActiveWorkSession = hasActiveWorkSession;
     }
 
-    public List<Role> getRoles()
-    {
-        return roles;
-    }
-
     public List<WorkSession> getWorkSessions()
     {
         return workSessions;
-    }
-
-    public void addRole(Role role)
-    {
-        if (roles == null)
-        {
-            roles = new ArrayList<>();
-        }
-
-        role.setUser(this);
-        roles.add(role);
-    }
-
-    public void addRoles(Role ... roles)
-    {
-        if (this.roles == null)
-        {
-            this.roles = new ArrayList<>();
-        }
-
-        Arrays.stream(roles).forEach(r -> r.setUser(this));
-        this.roles.addAll(Arrays.stream(roles).toList());
     }
 
     public void addWorkSession(WorkSession workSession)
@@ -180,5 +154,15 @@ public class User
     public void setAvatar(Avatar avatar)
     {
         this.avatar = avatar;
+    }
+
+    public Role getRole()
+    {
+        return role;
+    }
+
+    public void setRole(Role role)
+    {
+        this.role = role;
     }
 }

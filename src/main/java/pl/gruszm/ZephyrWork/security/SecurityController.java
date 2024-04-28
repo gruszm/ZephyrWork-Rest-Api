@@ -43,7 +43,7 @@ public class SecurityController
         {
             return ResponseEntity
                     .ok()
-                    .body(jwtUtils.createToken(loginRequest.getEmail(), foundUser.getRoles().stream().map(role -> role.getRoleName()).toList()));
+                    .body(jwtUtils.createToken(loginRequest.getEmail()));
         }
         else
         {

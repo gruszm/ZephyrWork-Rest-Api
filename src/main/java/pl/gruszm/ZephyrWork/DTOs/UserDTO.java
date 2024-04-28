@@ -1,18 +1,12 @@
 package pl.gruszm.ZephyrWork.DTOs;
 
-import pl.gruszm.ZephyrWork.entities.Role;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class UserDTO
 {
     private String email;
     private String firstName;
     private String lastName;
     private Integer supervisorId;
-    private List<String> roles;
+    private String roleName;
 
     public String getEmail()
     {
@@ -62,19 +56,14 @@ public class UserDTO
         return this;
     }
 
-    public List<String> getRoles()
+    public String getRoleName()
     {
-        return roles;
+        return roleName;
     }
 
-    public UserDTO addRoles(Role ... roles)
+    public UserDTO setRoleName(String roleName)
     {
-        if (this.roles == null)
-        {
-            this.roles = new ArrayList<>();
-        }
-
-        this.roles.addAll(Arrays.stream(roles).map(r -> r.getRoleName()).toList());
+        this.roleName = roleName;
 
         return this;
     }

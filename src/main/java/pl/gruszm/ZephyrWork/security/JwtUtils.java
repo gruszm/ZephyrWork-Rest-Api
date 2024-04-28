@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import pl.gruszm.ZephyrWork.config.TokenConfig;
 
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class JwtUtils
@@ -23,7 +22,7 @@ public class JwtUtils
         this.tokenConfig = tokenConfig;
     }
 
-    public String createToken(String userEmail, List<String> roles)
+    public String createToken(String userEmail)
     {
         return JWT.create()
                 .withSubject("UserDetails")
