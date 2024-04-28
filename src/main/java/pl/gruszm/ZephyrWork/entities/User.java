@@ -1,6 +1,7 @@
 package pl.gruszm.ZephyrWork.entities;
 
 import jakarta.persistence.*;
+import pl.gruszm.ZephyrWork.enums.RoleType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,13 +31,13 @@ public class User
     @Column(name = "has_active_work_session", nullable = false)
     private boolean hasActiveWorkSession;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoleType role;
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private User supervisor;
-
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<WorkSession> workSessions;
@@ -46,6 +47,7 @@ public class User
 
     public User()
     {
+        this.role = RoleType.EMPLOYEE;
         this.hasActiveWorkSession = false;
     }
 
@@ -135,7 +137,7 @@ public class User
         workSessions.add(workSession);
     }
 
-    public void addWorkSessions(WorkSession ... workSessions)
+    public void addWorkSessions(WorkSession... workSessions)
     {
         if (this.workSessions == null)
         {
@@ -156,12 +158,12 @@ public class User
         this.avatar = avatar;
     }
 
-    public Role getRole()
+    public RoleType getRole()
     {
         return role;
     }
 
-    public void setRole(Role role)
+    public void setRole(RoleType role)
     {
         this.role = role;
     }

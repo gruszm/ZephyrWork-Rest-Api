@@ -1,6 +1,6 @@
 package pl.gruszm.ZephyrWork.enums;
 
-public enum RoleEnum
+public enum RoleType
 {
     EMPLOYEE,
     MANAGER,

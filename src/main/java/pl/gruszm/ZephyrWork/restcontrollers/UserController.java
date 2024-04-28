@@ -45,7 +45,7 @@ public class UserController
                 .setLastName(user.getLastName())
                 .setEmail(user.getEmail())
                 .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
-                .setRoleName(user.getRole().getRoleType().name());
+                .setRoleName(user.getRole().name());
 
         return ResponseEntity.ok(userDTO);
     }
