@@ -1,15 +1,32 @@
 package pl.gruszm.ZephyrWork.DTOs;
 
+import jakarta.validation.constraints.*;
 import pl.gruszm.ZephyrWork.enums.RoleType;
 
 public class RegistrationDTO
 {
+    @Email
     private String email;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
+    @NotBlank
+    @Size(min = 6)
     private String password;
+
+    @NotBlank
+    @Size(min = 6)
     private String repeatPassword;
+
+    @NotNull
+    @PositiveOrZero
     private Integer supervisorId;
+
+    @NotNull
     private RoleType role;
 
     public String getEmail()
@@ -94,5 +111,10 @@ public class RegistrationDTO
         this.role = role;
 
         return this;
+    }
+
+    public boolean arePasswordFieldsDifferent()
+    {
+        return !password.equals(repeatPassword);
     }
 }
