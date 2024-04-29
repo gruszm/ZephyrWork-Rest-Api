@@ -115,7 +115,7 @@ public class UserController
                     .build();
         }
 
-        newUser = userService.processRegistration(registrationDTO);
+        newUser = userService.processRegistration(userDetails, registrationDTO);
 
         if (newUser == null)
         {

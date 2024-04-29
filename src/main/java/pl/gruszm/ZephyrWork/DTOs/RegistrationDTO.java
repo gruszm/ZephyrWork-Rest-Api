@@ -23,7 +23,7 @@ public class RegistrationDTO
     private String repeatPassword;
 
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Integer supervisorId;
 
     @NotNull

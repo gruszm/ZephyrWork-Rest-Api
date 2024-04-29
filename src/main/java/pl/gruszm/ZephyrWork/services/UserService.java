@@ -7,6 +7,7 @@ import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.enums.RoleType;
 import pl.gruszm.ZephyrWork.repostitories.UserRepository;
+import pl.gruszm.ZephyrWork.security.UserDetails;
 
 import java.util.Optional;
 
@@ -35,10 +36,26 @@ public class UserService
         return userRepository.findByEmail(email);
     }
 
-    public User processRegistration(RegistrationDTO registrationDTO)
+    public User processRegistration(UserDetails registeringUserDetails, RegistrationDTO registrationDTO)
     {
-        User supervisor, newUser;
+        User registeringUser, supervisor, newUser;
 
+        registeringUser = findByEmail(registeringUserDetails.getEmail());
+
+        // Make sure, that the user registering a new employee exists
+        if (registeringUser == null)
+        {
+            return null;
+        }
+
+        // A manager can register regular employees, but a CEO can register both managers and regular employees
+        // This condition also covers attempts of registering a new employee by another employee
+        if (registeringUser.getRole().compareTo(registrationDTO.getRole()) <= 0)
+        {
+            return null;
+        }
+
+        // Check, if password and repeat password fields are the same
         if (registrationDTO.arePasswordFieldsDifferent())
         {
             return null;
