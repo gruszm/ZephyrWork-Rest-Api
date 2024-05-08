@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
+import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.enums.RoleType;
 import pl.gruszm.ZephyrWork.repostitories.UserRepository;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,5 +82,23 @@ public class UserService
         newUser.setRole(registrationDTO.getRole());
 
         return userRepository.save(newUser);
+    }
+
+    public List<UserDTO> findSupervisors()
+    {
+        List<User> allUsers = userRepository.findAll();
+        List<User> allSupervisors = allUsers.stream().filter(u -> (u.getRole() == RoleType.CEO || u.getRole() == RoleType.MANAGER)).toList();
+        List<UserDTO> allSupervisorDTOs = new ArrayList<>();
+
+        for (User u : allSupervisors)
+        {
+            allSupervisorDTOs.add(new UserDTO()
+                    .setEmail(u.getEmail())
+                    .setFirstName(u.getFirstName())
+                    .setLastName(u.getLastName())
+                    .setRoleName(u.getRole().name()));
+        }
+
+        return allSupervisorDTOs;
     }
 }
