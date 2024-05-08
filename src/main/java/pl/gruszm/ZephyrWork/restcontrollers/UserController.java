@@ -13,6 +13,8 @@ import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 import pl.gruszm.ZephyrWork.services.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController
@@ -129,5 +131,13 @@ public class UserController
                     .ok()
                     .build();
         }
+    }
+
+    @GetMapping("/supervisors")
+    public ResponseEntity<List<UserDTO>> getAllSupervisors()
+    {
+        List<UserDTO> supervisors = userService.findSupervisors();
+
+        return ResponseEntity.ok(supervisors);
     }
 }
