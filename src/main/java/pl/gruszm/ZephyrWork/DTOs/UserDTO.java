@@ -2,11 +2,24 @@ package pl.gruszm.ZephyrWork.DTOs;
 
 public class UserDTO
 {
+    private int id;
     private String email;
     private String firstName;
     private String lastName;
     private Integer supervisorId;
     private String roleName;
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public UserDTO setId(int id)
+    {
+        this.id = id;
+
+        return this;
+    }
 
     public String getEmail()
     {

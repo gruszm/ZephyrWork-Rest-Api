@@ -46,6 +46,7 @@ public class UserController
         user = userService.findByEmail(userDetails.getEmail());
 
         userDTO = new UserDTO()
+                .setId(user.getId())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())
                 .setEmail(user.getEmail())
@@ -81,6 +82,7 @@ public class UserController
         supervisor = user.getSupervisor();
 
         supervisorDTO = new UserDTO()
+                .setId(supervisor.getId())
                 .setFirstName(supervisor.getFirstName())
                 .setLastName(supervisor.getLastName())
                 .setEmail(supervisor.getEmail())
