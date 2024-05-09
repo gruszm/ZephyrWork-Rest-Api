@@ -58,12 +58,6 @@ public class UserService
             return null;
         }
 
-        // Check, if password and repeat password fields are the different
-        if (registrationDTO.arePasswordFieldsDifferent())
-        {
-            return null;
-        }
-
         supervisor = findById(registrationDTO.getSupervisorId());
 
         // A regular employee cannot be a supervisor

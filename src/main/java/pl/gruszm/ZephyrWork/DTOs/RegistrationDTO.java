@@ -18,10 +18,6 @@ public class RegistrationDTO
     @Size(min = 6)
     private String password;
 
-    @NotBlank
-    @Size(min = 6)
-    private String repeatPassword;
-
     @NotNull
     @Positive
     private Integer supervisorId;
@@ -77,18 +73,6 @@ public class RegistrationDTO
         return this;
     }
 
-    public String getRepeatPassword()
-    {
-        return repeatPassword;
-    }
-
-    public RegistrationDTO setRepeatPassword(String repeatPassword)
-    {
-        this.repeatPassword = repeatPassword;
-
-        return this;
-    }
-
     public Integer getSupervisorId()
     {
         return supervisorId;
@@ -111,10 +95,5 @@ public class RegistrationDTO
         this.role = role;
 
         return this;
-    }
-
-    public boolean arePasswordFieldsDifferent()
-    {
-        return !password.equals(repeatPassword);
     }
 }
