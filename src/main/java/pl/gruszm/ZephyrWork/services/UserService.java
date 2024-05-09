@@ -93,6 +93,7 @@ public class UserService
         for (User u : allSupervisors)
         {
             allSupervisorDTOs.add(new UserDTO()
+                    .setId(u.getId())
                     .setEmail(u.getEmail())
                     .setFirstName(u.getFirstName())
                     .setLastName(u.getLastName())
