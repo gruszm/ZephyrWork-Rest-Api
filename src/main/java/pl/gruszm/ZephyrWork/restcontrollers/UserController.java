@@ -142,4 +142,30 @@ public class UserController
 
         return ResponseEntity.ok(supervisors);
     }
+
+    @GetMapping("/worksession/id/{id}")
+    public ResponseEntity<UserDTO> getUserByWorkSessionId(@RequestHeader("Auth") String jwt, @PathVariable("id") int id)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        UserDTO userDTO;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        userDTO = userService.findUserByWorkSessionId(userDetails.getEmail(), id);
+
+        if (userDTO == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+
+        return ResponseEntity.ok(userDTO);
+    }
 }

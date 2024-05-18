@@ -60,6 +60,18 @@ public class WorkSessionService
         }
     }
 
+    public List<WorkSession> findWorkSessionsOfEmployees(String supervisorEmail)
+    {
+        User user = userRepository.findByEmail(supervisorEmail);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return workSessionRepository.findWorkSessionsOfEmployees(supervisorEmail);
+    }
+
     @Transactional
     public WorkSession startWorkSessionForUser(String email)
     {

@@ -83,6 +83,31 @@ public class WorkSessionController
         return ResponseEntity.ok(workSessions);
     }
 
+    @GetMapping("/by/supervisor")
+    public ResponseEntity<List<WorkSession>> getWorkSessionsOfEmployees(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        List<WorkSession> workSessions;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        workSessions = workSessionService.findWorkSessionsOfEmployees(userDetails.getEmail());
+
+        if (workSessions == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(workSessions);
+    }
+
     @PostMapping("/start")
     public ResponseEntity<WorkSession> startWorkSession(@RequestHeader("Auth") String jwt)
     {

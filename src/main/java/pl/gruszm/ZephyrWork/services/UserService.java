@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
+import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.enums.RoleType;
 import pl.gruszm.ZephyrWork.repostitories.UserRepository;
+import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 
 import java.util.ArrayList;
@@ -17,15 +19,14 @@ import java.util.Optional;
 @Service
 public class UserService
 {
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder)
-    {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private WorkSessionRepository workSessionRepository;
 
     public User findById(int id)
     {
@@ -95,5 +96,37 @@ public class UserService
         }
 
         return allSupervisorDTOs;
+    }
+
+    public UserDTO findUserByWorkSessionId(String email, int workSessionId)
+    {
+        User requestingUser = findByEmail(email);
+        User userRelatedWithWorkSession;
+        UserDTO userDTO;
+        Optional<WorkSession> workSessionOptional;
+
+        if ((requestingUser == null) || (requestingUser.getRole().equals(RoleType.EMPLOYEE)))
+        {
+            return null;
+        }
+
+        workSessionOptional = workSessionRepository.findById(workSessionId);
+
+        if (workSessionOptional.isEmpty())
+        {
+            return null;
+        }
+
+        userRelatedWithWorkSession = workSessionOptional.get().getUser();
+
+        userDTO = new UserDTO()
+                .setId(userRelatedWithWorkSession.getId())
+                .setEmail(userRelatedWithWorkSession.getEmail())
+                .setFirstName(userRelatedWithWorkSession.getFirstName())
+                .setLastName(userRelatedWithWorkSession.getLastName())
+                .setRoleName(userRelatedWithWorkSession.getRole().name())
+                .setSupervisorId((userRelatedWithWorkSession.getSupervisor() == null) ? null : userRelatedWithWorkSession.getSupervisor().getId());
+
+        return userDTO;
     }
 }

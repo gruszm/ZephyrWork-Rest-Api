@@ -18,4 +18,7 @@ public interface WorkSessionRepository extends JpaRepository<WorkSession, Intege
 
     @Query("SELECT ws FROM WorkSession ws WHERE ws.user.email LIKE :email")
     List<WorkSession> findByUserEmail(@Param("email") String email, Pageable pageable);
+
+    @Query("SELECT ws FROM WorkSession ws WHERE ws.user.supervisor.email LIKE :supervisorEmail")
+    List<WorkSession> findWorkSessionsOfEmployees(@Param("supervisorEmail") String supervisorEmail);
 }
