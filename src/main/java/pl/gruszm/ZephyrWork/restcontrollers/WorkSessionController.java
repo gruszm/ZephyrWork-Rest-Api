@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.gruszm.ZephyrWork.DTOs.WorkSessionDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
@@ -66,10 +67,10 @@ public class WorkSessionController
     }
 
     @GetMapping("/user/token")
-    public ResponseEntity<List<WorkSession>> getWorkSessionsByToken(@RequestHeader("Auth") String jwt)
+    public ResponseEntity<List<WorkSessionDTO>> getWorkSessionsByToken(@RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
-        List<WorkSession> workSessions;
+        List<WorkSessionDTO> workSessionDTOs;
 
         if (userDetails == null)
         {
@@ -78,9 +79,9 @@ public class WorkSessionController
                     .build();
         }
 
-        workSessions = workSessionService.findByUserEmail(userDetails.getEmail());
+        workSessionDTOs = workSessionService.findByUserEmail(userDetails.getEmail());
 
-        return ResponseEntity.ok(workSessions);
+        return ResponseEntity.ok(workSessionDTOs);
     }
 
     @GetMapping("/by/supervisor")

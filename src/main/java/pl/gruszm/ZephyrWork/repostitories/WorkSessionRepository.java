@@ -1,6 +1,7 @@
 package pl.gruszm.ZephyrWork.repostitories;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +15,7 @@ public interface WorkSessionRepository extends JpaRepository<WorkSession, Intege
     List<WorkSession> findByUserId(@Param("id") int id);
 
     @Query("SELECT ws FROM WorkSession ws WHERE ws.user.email LIKE :email")
-    List<WorkSession> findByUserEmail(@Param("email") String email);
+    List<WorkSession> findByUserEmail(@Param("email") String email, Sort sort);
 
     @Query("SELECT ws FROM WorkSession ws WHERE ws.user.email LIKE :email")
     List<WorkSession> findByUserEmail(@Param("email") String email, Pageable pageable);
