@@ -58,7 +58,8 @@ public class WorkSessionService
                     .setId(ws.getId())
                     .setStartTime(ws.getStartTime())
                     .setEndTime(ws.getEndTime())
-                    .setEmployeeName(sb.toString()));
+                    .setEmployeeName(sb.toString())
+                    .setWorkSessionState(ws.getWorkSessionState()));
         }
 
         return workSessionDTOs;
