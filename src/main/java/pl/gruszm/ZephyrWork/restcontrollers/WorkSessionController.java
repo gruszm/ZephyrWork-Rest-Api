@@ -85,10 +85,10 @@ public class WorkSessionController
     }
 
     @GetMapping("/by/supervisor")
-    public ResponseEntity<List<WorkSession>> getWorkSessionsOfEmployees(@RequestHeader("Auth") String jwt)
+    public ResponseEntity<List<WorkSessionDTO>> getWorkSessionsOfEmployees(@RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
-        List<WorkSession> workSessions;
+        List<WorkSessionDTO> workSessionDTOs;
 
         if (userDetails == null)
         {
@@ -97,16 +97,16 @@ public class WorkSessionController
                     .build();
         }
 
-        workSessions = workSessionService.findWorkSessionsOfEmployees(userDetails.getEmail());
+        workSessionDTOs = workSessionService.findWorkSessionsOfEmployees(userDetails.getEmail());
 
-        if (workSessions == null)
+        if (workSessionDTOs == null)
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
 
-        return ResponseEntity.ok(workSessions);
+        return ResponseEntity.ok(workSessionDTOs);
     }
 
     @PostMapping("/start")

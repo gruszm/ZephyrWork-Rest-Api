@@ -82,16 +82,37 @@ public class WorkSessionService
         }
     }
 
-    public List<WorkSession> findWorkSessionsOfEmployees(String supervisorEmail)
+    public List<WorkSessionDTO> findWorkSessionsOfEmployees(String supervisorEmail)
     {
         User user = userRepository.findByEmail(supervisorEmail);
+        List<WorkSession> workSessions;
+        List<WorkSessionDTO> workSessionDTOs;
 
         if (user == null)
         {
             return null;
         }
 
-        return workSessionRepository.findWorkSessionsOfEmployees(supervisorEmail);
+        workSessions = workSessionRepository.findWorkSessionsOfEmployees(supervisorEmail);
+        workSessionDTOs = new ArrayList<>();
+
+        for (WorkSession ws : workSessions)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(ws.getUser().getFirstName())
+                    .append(" ")
+                    .append(ws.getUser().getLastName());
+
+            workSessionDTOs.add(new WorkSessionDTO()
+                    .setId(ws.getId())
+                    .setStartTime(ws.getStartTime())
+                    .setEndTime(ws.getEndTime())
+                    .setEmployeeName(sb.toString())
+                    .setWorkSessionState(ws.getWorkSessionState()));
+        }
+
+        return workSessionDTOs;
     }
 
     @Transactional
