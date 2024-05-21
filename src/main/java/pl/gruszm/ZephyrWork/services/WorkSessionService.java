@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.gruszm.ZephyrWork.DTOs.WorkSessionDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
 import pl.gruszm.ZephyrWork.repostitories.UserRepository;
 import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +41,27 @@ public class WorkSessionService
         return workSessionRepository.findByUserId(id);
     }
 
-    public List<WorkSession> findByUserEmail(String email)
+    public List<WorkSessionDTO> findByUserEmail(String email)
     {
-        return workSessionRepository.findByUserEmail(email);
+        List<WorkSession> workSessions = workSessionRepository.findByUserEmail(email, Sort.by("startTime").descending());
+        List<WorkSessionDTO> workSessionDTOs = new ArrayList<>();
+
+        for (WorkSession ws : workSessions)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(ws.getUser().getFirstName())
+                    .append(" ")
+                    .append(ws.getUser().getLastName());
+
+            workSessionDTOs.add(new WorkSessionDTO()
+                    .setId(ws.getId())
+                    .setStartTime(ws.getStartTime())
+                    .setEndTime(ws.getEndTime())
+                    .setEmployeeName(sb.toString()));
+        }
+
+        return workSessionDTOs;
     }
 
     public WorkSession deleteById(int id)
