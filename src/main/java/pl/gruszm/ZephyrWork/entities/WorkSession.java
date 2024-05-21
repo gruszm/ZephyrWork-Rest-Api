@@ -2,6 +2,7 @@ package pl.gruszm.ZephyrWork.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import pl.gruszm.ZephyrWork.enums.WorkSessionState;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ public class WorkSession
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private WorkSessionState workSessionState;
+
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -35,6 +40,7 @@ public class WorkSession
     public WorkSession()
     {
         startTime = LocalDateTime.now();
+        workSessionState = WorkSessionState.IN_PROGRESS;
     }
 
     public int getId()
@@ -82,6 +88,16 @@ public class WorkSession
         return locations;
     }
 
+    public WorkSessionState getWorkSessionState()
+    {
+        return workSessionState;
+    }
+
+    public void setWorkSessionState(WorkSessionState workSessionState)
+    {
+        this.workSessionState = workSessionState;
+    }
+
     public void addLocation(Location location)
     {
         if (locations == null)
@@ -93,7 +109,7 @@ public class WorkSession
         locations.add(location);
     }
 
-    public void addLocations(Location ... locations)
+    public void addLocations(Location... locations)
     {
         if (this.locations == null)
         {

@@ -1,5 +1,7 @@
 package pl.gruszm.ZephyrWork.DTOs;
 
+import pl.gruszm.ZephyrWork.enums.WorkSessionState;
+
 import java.time.LocalDateTime;
 
 public class WorkSessionDTO
@@ -8,6 +10,7 @@ public class WorkSessionDTO
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String employeeName;
+    private WorkSessionState workSessionState;
 
     public int getId()
     {
@@ -53,6 +56,18 @@ public class WorkSessionDTO
     public WorkSessionDTO setEmployeeName(String employeeName)
     {
         this.employeeName = employeeName;
+
+        return this;
+    }
+
+    public WorkSessionState getWorkSessionState()
+    {
+        return workSessionState;
+    }
+
+    public WorkSessionDTO setWorkSessionState(WorkSessionState workSessionState)
+    {
+        this.workSessionState = workSessionState;
 
         return this;
     }
