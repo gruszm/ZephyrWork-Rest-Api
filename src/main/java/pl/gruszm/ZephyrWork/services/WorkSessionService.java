@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pl.gruszm.ZephyrWork.DTOs.WorkSessionDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
+import pl.gruszm.ZephyrWork.enums.WorkSessionState;
 import pl.gruszm.ZephyrWork.repostitories.UserRepository;
 import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 
@@ -140,6 +141,7 @@ public class WorkSessionService
 
         user.setActiveWorkSession(false);
         latestWorkSession.setEndTime(LocalDateTime.now());
+        latestWorkSession.setWorkSessionState(WorkSessionState.UNDER_REVIEW);
 
         userRepository.save(user);
         savedWorkSession = workSessionRepository.save(latestWorkSession);
