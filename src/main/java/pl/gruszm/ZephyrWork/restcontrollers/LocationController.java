@@ -67,10 +67,10 @@ public class LocationController
     }
 
     @GetMapping("/worksession/{id}")
-    public ResponseEntity<List<Location>> getLocationsByWorkSessionId(@PathVariable("id") int id, @RequestHeader("Auth") String jwt)
+    public ResponseEntity<List<LocationDTO>> getLocationsByWorkSessionId(@PathVariable("id") int id, @RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
-        List<Location> locationList;
+        List<LocationDTO> locationList;
         User user;
 
         if (userDetails == null)

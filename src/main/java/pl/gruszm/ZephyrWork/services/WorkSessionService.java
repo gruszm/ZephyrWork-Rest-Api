@@ -93,7 +93,7 @@ public class WorkSessionService
             return null;
         }
 
-        workSessions = workSessionRepository.findWorkSessionsOfEmployees(supervisorEmail);
+        workSessions = workSessionRepository.findWorkSessionsOfEmployees(supervisorEmail, Sort.by("startTime").descending());
         workSessionDTOs = new ArrayList<>();
 
         for (WorkSession ws : workSessions)
