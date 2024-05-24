@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.LocationDTO;
 import pl.gruszm.ZephyrWork.entities.Location;
 import pl.gruszm.ZephyrWork.entities.User;
+import pl.gruszm.ZephyrWork.enums.RoleType;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 import pl.gruszm.ZephyrWork.services.LocationService;
@@ -82,8 +83,9 @@ public class LocationController
 
         user = userService.findByEmail(userDetails.getEmail());
 
-        // Make sure that this work session belongs to this user
-        if (!user.getWorkSessions().stream().map(ws -> ws.getId()).toList().contains(id))
+        // Make sure that this work session belongs to this user, check only for regular employees,
+        // as the managers and the CEO need to see them
+        if ((user.getRole().equals(RoleType.EMPLOYEE)) && (!user.getWorkSessions().stream().map(ws -> ws.getId()).toList().contains(id)))
         {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
