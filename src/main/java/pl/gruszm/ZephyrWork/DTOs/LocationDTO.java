@@ -6,7 +6,7 @@ public class LocationDTO
     private double latitude;
     private double longitude;
 
-    public LocationDTO(String locationTimeAsString, float latitude, float longitude)
+    public LocationDTO(String locationTimeAsString, double latitude, double longitude)
     {
         this.locationTimeAsString = locationTimeAsString;
         this.latitude = latitude;

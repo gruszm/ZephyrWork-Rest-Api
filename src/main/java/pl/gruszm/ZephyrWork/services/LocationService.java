@@ -35,9 +35,12 @@ public class LocationService
         return optionalLocation.isPresent() ? optionalLocation.get() : null;
     }
 
-    public List<Location> findByWorkSessionId(int id)
+    public List<LocationDTO> findByWorkSessionId(int id)
     {
-        return locationRepository.findByWorkSessionId(id);
+        List<Location> locations = locationRepository.findByWorkSessionId(id);
+        List<LocationDTO> locationDTOs = locations.stream().map(loc -> new LocationDTO(loc.getLocationTime().toString(), loc.getLatitude(), loc.getLongitude())).toList();
+
+        return locationDTOs;
     }
 
     public Location saveLocationForUser(String email, LocationDTO locationDTO)
