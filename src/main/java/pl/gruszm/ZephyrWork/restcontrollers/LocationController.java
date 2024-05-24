@@ -71,22 +71,11 @@ public class LocationController
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         List<LocationDTO> locationList;
-        User user;
 
         if (userDetails == null)
         {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .build();
-        }
-
-        user = userService.findByEmail(userDetails.getEmail());
-
-        // Make sure that this work session belongs to this user
-        if (!user.getWorkSessions().stream().map(ws -> ws.getId()).toList().contains(id))
-        {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
                     .build();
         }
 
