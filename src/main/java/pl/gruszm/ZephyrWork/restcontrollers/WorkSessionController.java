@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.WorkSessionDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
+import pl.gruszm.ZephyrWork.enums.RoleType;
+import pl.gruszm.ZephyrWork.enums.WorkSessionState;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 import pl.gruszm.ZephyrWork.services.UserService;
@@ -82,6 +84,42 @@ public class WorkSessionController
         workSessionDTOs = workSessionService.findByUserEmail(userDetails.getEmail());
 
         return ResponseEntity.ok(workSessionDTOs);
+    }
+
+    @PostMapping("/approve/{id}")
+    public ResponseEntity<Void> approveWorkSession(@RequestHeader("Auth") String jwt, @PathVariable("id") int workSessionId)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User user;
+        WorkSession workSession;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        user = userService.findByEmail(userDetails.getEmail());
+
+        // Regular employees cannot approve work sessions
+        if (user.getRole().equals(RoleType.EMPLOYEE))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build();
+        }
+
+        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.APPROVED, null);
+
+        if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/by/supervisor")
