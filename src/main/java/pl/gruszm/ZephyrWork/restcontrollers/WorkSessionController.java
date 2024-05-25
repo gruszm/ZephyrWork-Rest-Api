@@ -193,6 +193,31 @@ public class WorkSessionController
         return ResponseEntity.ok(null);
     }
 
+    @PostMapping("/resend/{id}")
+    public ResponseEntity<Void> resendWorkSession(@RequestHeader("Auth") String jwt, @PathVariable("id") int workSessionId, @RequestBody String notes)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        WorkSession workSession;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.UNDER_REVIEW, notes);
+
+        if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(null);
+    }
+
     @GetMapping("/by/supervisor")
     public ResponseEntity<List<WorkSessionDTO>> getWorkSessionsOfEmployees(@RequestHeader("Auth") String jwt)
     {
