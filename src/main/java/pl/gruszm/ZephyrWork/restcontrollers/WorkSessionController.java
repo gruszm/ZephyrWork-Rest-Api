@@ -145,7 +145,43 @@ public class WorkSessionController
                     .build();
         }
 
-        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.APPROVED, null);
+        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.CANCELLED, null);
+
+        if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/return/{id}")
+    public ResponseEntity<Void> returnWorkSession(@RequestHeader("Auth") String jwt, @PathVariable("id") int workSessionId, @RequestBody String notes)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User user;
+        WorkSession workSession;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        user = userService.findByEmail(userDetails.getEmail());
+
+        // Regular employees cannot return work sessions
+        if (user.getRole().equals(RoleType.EMPLOYEE))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build();
+        }
+
+        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.RETURNED, notes);
 
         if (workSession == null)
         {
