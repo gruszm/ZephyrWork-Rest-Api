@@ -122,6 +122,41 @@ public class WorkSessionController
         return ResponseEntity.ok(null);
     }
 
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<Void> cancelWorkSession(@RequestHeader("Auth") String jwt, @PathVariable("id") int workSessionId)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        WorkSession workSession;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        workSession = workSessionService.findById(workSessionId);
+
+        // The work session must exist and must be in progress
+        if ((workSession == null) || (!workSession.getWorkSessionState().equals(WorkSessionState.IN_PROGRESS)))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        workSession = workSessionService.changeWorkSessionState(workSessionId, WorkSessionState.APPROVED, null);
+
+        if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(null);
+    }
+
     @GetMapping("/by/supervisor")
     public ResponseEntity<List<WorkSessionDTO>> getWorkSessionsOfEmployees(@RequestHeader("Auth") String jwt)
     {

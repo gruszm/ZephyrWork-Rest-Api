@@ -98,7 +98,14 @@ public class WorkSessionService
 
         if (notes != null)
         {
-            workSession.setNotes(notes);
+            if (workSessionState.equals(WorkSessionState.RETURNED))
+            {
+                workSession.setNotesFromSupervisor(notes);
+            }
+            else if(workSession.equals(WorkSessionState.UNDER_REVIEW))
+            {
+                workSession.setNotesFromEmployee(notes);
+            }
         }
 
         return workSessionRepository.save(workSession);

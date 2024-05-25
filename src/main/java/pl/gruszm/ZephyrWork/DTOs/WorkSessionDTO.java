@@ -11,6 +11,9 @@ public class WorkSessionDTO
     private LocalDateTime endTime;
     private String employeeName;
     private WorkSessionState workSessionState;
+    private String notesFromSupervisor;
+    private String notesFromEmployee;
+
 
     public int getId()
     {
@@ -68,6 +71,30 @@ public class WorkSessionDTO
     public WorkSessionDTO setWorkSessionState(WorkSessionState workSessionState)
     {
         this.workSessionState = workSessionState;
+
+        return this;
+    }
+
+    public String getNotesFromSupervisor()
+    {
+        return notesFromSupervisor;
+    }
+
+    public WorkSessionDTO setNotesFromSupervisor(String notesFromSupervisor)
+    {
+        this.notesFromSupervisor = notesFromSupervisor;
+
+        return this;
+    }
+
+    public String getNotesFromEmployee()
+    {
+        return notesFromEmployee;
+    }
+
+    public WorkSessionDTO setNotesFromEmployee(String notesFromEmployee)
+    {
+        this.notesFromEmployee = notesFromEmployee;
 
         return this;
     }
