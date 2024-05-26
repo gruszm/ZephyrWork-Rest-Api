@@ -28,6 +28,12 @@ public class WorkSession
     @Column(name = "state")
     private WorkSessionState workSessionState;
 
+    @Column(name = "notes_from_supervisor")
+    private String notesFromSupervisor;
+
+    @Column(name = "notes_from_employee")
+    private String notesFromEmployee;
+
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -96,6 +102,26 @@ public class WorkSession
     public void setWorkSessionState(WorkSessionState workSessionState)
     {
         this.workSessionState = workSessionState;
+    }
+
+    public String getNotesFromSupervisor()
+    {
+        return notesFromSupervisor;
+    }
+
+    public void setNotesFromSupervisor(String notesFromSupervisor)
+    {
+        this.notesFromSupervisor = notesFromSupervisor;
+    }
+
+    public String getNotesFromEmployee()
+    {
+        return notesFromEmployee;
+    }
+
+    public void setNotesFromEmployee(String notesFromEmployee)
+    {
+        this.notesFromEmployee = notesFromEmployee;
     }
 
     public void addLocation(Location location)

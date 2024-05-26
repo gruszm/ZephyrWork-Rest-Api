@@ -1,5 +1,6 @@
 package pl.gruszm.ZephyrWork.services;
 
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -80,6 +81,34 @@ public class WorkSessionService
         {
             return null;
         }
+    }
+
+    public WorkSession changeWorkSessionState(int workSessionId, WorkSessionState workSessionState, @Nullable String notes)
+    {
+        Optional<WorkSession> workSessionOptional = workSessionRepository.findById(workSessionId);
+        WorkSession workSession;
+
+        if (workSessionOptional.isEmpty())
+        {
+            return null;
+        }
+
+        workSession = workSessionOptional.get();
+        workSession.setWorkSessionState(workSessionState);
+
+        if (notes != null)
+        {
+            if (workSessionState.equals(WorkSessionState.RETURNED))
+            {
+                workSession.setNotesFromSupervisor(notes);
+            }
+            else if(workSession.equals(WorkSessionState.UNDER_REVIEW))
+            {
+                workSession.setNotesFromEmployee(notes);
+            }
+        }
+
+        return workSessionRepository.save(workSession);
     }
 
     public List<WorkSessionDTO> findWorkSessionsOfEmployees(String supervisorEmail)
