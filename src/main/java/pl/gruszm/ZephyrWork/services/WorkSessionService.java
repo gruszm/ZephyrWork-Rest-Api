@@ -61,7 +61,9 @@ public class WorkSessionService
                     .setStartTime(ws.getStartTime())
                     .setEndTime(ws.getEndTime())
                     .setEmployeeName(sb.toString())
-                    .setWorkSessionState(ws.getWorkSessionState()));
+                    .setWorkSessionState(ws.getWorkSessionState())
+                    .setNotesFromSupervisor(ws.getNotesFromSupervisor())
+                    .setNotesFromEmployee(ws.getNotesFromEmployee()));
         }
 
         return workSessionDTOs;
@@ -102,7 +104,7 @@ public class WorkSessionService
             {
                 workSession.setNotesFromSupervisor(notes);
             }
-            else if(workSession.equals(WorkSessionState.UNDER_REVIEW))
+            else if (workSession.equals(WorkSessionState.UNDER_REVIEW))
             {
                 workSession.setNotesFromEmployee(notes);
             }
