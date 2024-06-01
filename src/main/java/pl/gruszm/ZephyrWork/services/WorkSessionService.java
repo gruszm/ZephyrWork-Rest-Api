@@ -104,7 +104,7 @@ public class WorkSessionService
             {
                 workSession.setNotesFromSupervisor(notes);
             }
-            else if (workSession.equals(WorkSessionState.UNDER_REVIEW))
+            else if (workSessionState.equals(WorkSessionState.UNDER_REVIEW))
             {
                 workSession.setNotesFromEmployee(notes);
             }
