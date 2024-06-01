@@ -140,7 +140,9 @@ public class WorkSessionService
                     .setStartTime(ws.getStartTime())
                     .setEndTime(ws.getEndTime())
                     .setEmployeeName(sb.toString())
-                    .setWorkSessionState(ws.getWorkSessionState()));
+                    .setWorkSessionState(ws.getWorkSessionState())
+                    .setNotesFromEmployee(ws.getNotesFromEmployee())
+                    .setNotesFromSupervisor(ws.getNotesFromSupervisor()));
         }
 
         return workSessionDTOs;
