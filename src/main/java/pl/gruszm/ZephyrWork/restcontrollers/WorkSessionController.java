@@ -137,8 +137,11 @@ public class WorkSessionController
 
         workSession = workSessionService.findById(workSessionId);
 
-        // The work session must exist and must be in progress
-        if ((workSession == null) || ((!workSession.getWorkSessionState().equals(WorkSessionState.IN_PROGRESS)) && (!workSession.getWorkSessionState().equals(WorkSessionState.UNDER_REVIEW))))
+        // The work session must exist and must be in progress/under review/returned
+        if ((workSession == null) ||
+                ((!workSession.getWorkSessionState().equals(WorkSessionState.IN_PROGRESS))
+                        && (!workSession.getWorkSessionState().equals(WorkSessionState.UNDER_REVIEW))
+                        && (!workSession.getWorkSessionState().equals(WorkSessionState.RETURNED))))
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
