@@ -103,6 +103,7 @@ public class WorkSessionService
             if (workSessionState.equals(WorkSessionState.RETURNED))
             {
                 workSession.setNotesFromSupervisor(notes);
+                workSession.setNotesFromEmployee(null);
             }
             else if (workSessionState.equals(WorkSessionState.UNDER_REVIEW))
             {
