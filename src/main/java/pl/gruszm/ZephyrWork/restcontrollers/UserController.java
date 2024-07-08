@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
+import pl.gruszm.ZephyrWork.enums.RoleType;
 import pl.gruszm.ZephyrWork.security.JwtUtils;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 import pl.gruszm.ZephyrWork.services.UserService;
@@ -27,6 +28,41 @@ public class UserController
     {
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+    }
+
+    @GetMapping("/subordinates")
+    public ResponseEntity<List<UserDTO>> getSubordinates(@RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        List<UserDTO> userDTOs;
+        User user;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        user = userService.findByEmail(userDetails.getEmail());
+
+        if ((user == null) || (user.getRole().equals(RoleType.EMPLOYEE)))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        userDTOs = userService.findSubordinates(user);
+
+        if (userDTOs == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        return ResponseEntity.ok(userDTOs);
     }
 
     @GetMapping("/token")

@@ -129,4 +129,19 @@ public class UserService
 
         return userDTO;
     }
+
+    public List<UserDTO> findSubordinates(User user)
+    {
+        List<User> users = userRepository.findSubordinatesBySupervisorEmail(user.getEmail());
+        List<UserDTO> userDTOs = users.stream().map(u -> new UserDTO()
+                .setId(u.getId())
+                .setEmail(u.getEmail())
+                .setSupervisorId(u.getSupervisor().getId())
+                .setRoleName(u.getRole().name())
+                .setFirstName(u.getFirstName())
+                .setLastName(u.getLastName())
+        ).toList();
+
+        return userDTOs;
+    }
 }
