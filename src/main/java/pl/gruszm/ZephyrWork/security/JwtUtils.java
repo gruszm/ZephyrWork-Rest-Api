@@ -28,7 +28,7 @@ public class JwtUtils
                 .withSubject("UserDetails")
                 .withClaim("userEmail", userEmail)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + (tokenConfig.getExpirationTimeSeconds() * 1000)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (tokenConfig.getExpirationTimeDays() * 1000 * 86400)))
                 .sign(Algorithm.HMAC512(tokenConfig.getSecret()));
     }
 

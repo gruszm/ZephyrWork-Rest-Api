@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class TokenConfig
 {
     private String secret;
-    private long expirationTimeSeconds;
+    private long expirationTimeDays;
 
     public String getSecret()
     {
@@ -20,13 +20,13 @@ public class TokenConfig
         this.secret = secret;
     }
 
-    public long getExpirationTimeSeconds()
+    public long getExpirationTimeDays()
     {
-        return expirationTimeSeconds;
+        return expirationTimeDays;
     }
 
-    public void setExpirationTimeSeconds(long expirationTimeSeconds)
+    public void setExpirationTimeDays(long expirationTimeDays)
     {
-        this.expirationTimeSeconds = expirationTimeSeconds;
+        this.expirationTimeDays = expirationTimeDays;
     }
 }
