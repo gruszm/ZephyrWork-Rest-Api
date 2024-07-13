@@ -247,10 +247,11 @@ public class WorkSessionController
     }
 
     @PostMapping("/start")
-    public ResponseEntity<WorkSession> startWorkSession(@RequestHeader("Auth") String jwt)
+    public ResponseEntity<Integer> startWorkSession(@RequestHeader("Auth") String jwt)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         WorkSession workSession;
+        int interval;
 
         if (userDetails == null)
         {
@@ -260,8 +261,9 @@ public class WorkSessionController
         }
 
         workSession = workSessionService.startWorkSessionForUser(userDetails.getEmail());
+        interval = userService.getLocationRegistrationInterval(userDetails.getEmail());
 
-        if (workSession == null)
+        if ((workSession == null) || (interval == -1))
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -269,7 +271,7 @@ public class WorkSessionController
         }
         else
         {
-            return ResponseEntity.ok(workSession);
+            return ResponseEntity.ok(interval);
         }
     }
 
