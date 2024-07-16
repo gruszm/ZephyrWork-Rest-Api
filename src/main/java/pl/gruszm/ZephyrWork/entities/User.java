@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "users")
 public class User
 {
+    private static final int DEFAULT_INTERVAL = 30;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,6 +37,9 @@ public class User
     @Column(name = "role", nullable = false)
     private RoleType role;
 
+    @Column(name = "registration_interval")
+    private int locationRegistrationInterval;
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private User supervisor;
@@ -49,6 +54,7 @@ public class User
     {
         this.role = RoleType.EMPLOYEE;
         this.hasActiveWorkSession = false;
+        this.locationRegistrationInterval = DEFAULT_INTERVAL;
     }
 
     public int getId()
@@ -166,5 +172,15 @@ public class User
     public void setRole(RoleType role)
     {
         this.role = role;
+    }
+
+    public int getLocationRegistrationInterval()
+    {
+        return locationRegistrationInterval;
+    }
+
+    public void setLocationRegistrationInterval(int locationRegistrationInterval)
+    {
+        this.locationRegistrationInterval = locationRegistrationInterval;
     }
 }

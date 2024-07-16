@@ -92,7 +92,8 @@ public class UserService
                     .setEmail(u.getEmail())
                     .setFirstName(u.getFirstName())
                     .setLastName(u.getLastName())
-                    .setRoleName(u.getRole().name()));
+                    .setRoleName(u.getRole().name())
+                    .setLocationRegistrationInterval(u.getLocationRegistrationInterval()));
         }
 
         return allSupervisorDTOs;
@@ -125,7 +126,8 @@ public class UserService
                 .setFirstName(userRelatedWithWorkSession.getFirstName())
                 .setLastName(userRelatedWithWorkSession.getLastName())
                 .setRoleName(userRelatedWithWorkSession.getRole().name())
-                .setSupervisorId((userRelatedWithWorkSession.getSupervisor() == null) ? null : userRelatedWithWorkSession.getSupervisor().getId());
+                .setSupervisorId((userRelatedWithWorkSession.getSupervisor() == null) ? null : userRelatedWithWorkSession.getSupervisor().getId())
+                .setLocationRegistrationInterval(userRelatedWithWorkSession.getLocationRegistrationInterval());
 
         return userDTO;
     }
@@ -140,8 +142,30 @@ public class UserService
                 .setRoleName(u.getRole().name())
                 .setFirstName(u.getFirstName())
                 .setLastName(u.getLastName())
+                .setLocationRegistrationInterval(u.getLocationRegistrationInterval())
         ).toList();
 
         return userDTOs;
+    }
+
+    public User setInterval(User employeeToUpdate, int interval)
+    {
+        employeeToUpdate.setLocationRegistrationInterval(interval);
+
+        return userRepository.save(employeeToUpdate);
+    }
+
+    public int getLocationRegistrationInterval(String email)
+    {
+        User user = userRepository.findByEmail(email);
+
+        if (user != null)
+        {
+            return user.getLocationRegistrationInterval();
+        }
+        else
+        {
+            return -1;
+        }
     }
 }

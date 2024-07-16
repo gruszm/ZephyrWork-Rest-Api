@@ -30,6 +30,55 @@ public class UserController
         this.userService = userService;
     }
 
+    @GetMapping("/subordinates/interval/{employeeId}/{interval}")
+    public ResponseEntity<Void> setEmployeeLocationRegistrationInterval(@PathVariable("employeeId") int employeeId,
+                                                                        @PathVariable("interval") int interval,
+                                                                        @RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User supervisor, employeeToUpdate, updatedEmployee;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        supervisor = userService.findByEmail(userDetails.getEmail());
+
+        if ((supervisor == null) || (supervisor.getRole().equals(RoleType.EMPLOYEE)))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        employeeToUpdate = userService.findById(employeeId);
+
+        if (employeeToUpdate == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+
+        updatedEmployee = userService.setInterval(employeeToUpdate, interval);
+
+        if (updatedEmployee == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity
+                    .ok()
+                    .build();
+        }
+    }
+
     @GetMapping("/subordinates")
     public ResponseEntity<List<UserDTO>> getSubordinates(@RequestHeader("Auth") String jwt)
     {
@@ -87,7 +136,8 @@ public class UserController
                 .setLastName(user.getLastName())
                 .setEmail(user.getEmail())
                 .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
-                .setRoleName(user.getRole().name());
+                .setRoleName(user.getRole().name())
+                .setLocationRegistrationInterval(user.getLocationRegistrationInterval());
 
         return ResponseEntity.ok(userDTO);
     }

@@ -8,6 +8,7 @@ public class UserDTO
     private String lastName;
     private Integer supervisorId;
     private String roleName;
+    private int locationRegistrationInterval;
 
     public int getId()
     {
@@ -77,6 +78,18 @@ public class UserDTO
     public UserDTO setRoleName(String roleName)
     {
         this.roleName = roleName;
+
+        return this;
+    }
+
+    public int getLocationRegistrationInterval()
+    {
+        return locationRegistrationInterval;
+    }
+
+    public UserDTO setLocationRegistrationInterval(int locationRegistrationInterval)
+    {
+        this.locationRegistrationInterval = locationRegistrationInterval;
 
         return this;
     }
