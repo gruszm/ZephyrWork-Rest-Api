@@ -30,7 +30,7 @@ public class UserController
         this.userService = userService;
     }
 
-    @GetMapping("/subordinates/interval/{userId}/{interval}")
+    @GetMapping("/subordinates/interval/{employeeId}/{interval}")
     public ResponseEntity<Void> setEmployeeLocationRegistrationInterval(@PathVariable("employeeId") int employeeId,
                                                                         @PathVariable("interval") int interval,
                                                                         @RequestHeader("Auth") String jwt)
