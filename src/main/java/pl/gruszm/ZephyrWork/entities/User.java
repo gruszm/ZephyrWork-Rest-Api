@@ -3,6 +3,7 @@ package pl.gruszm.ZephyrWork.entities;
 import jakarta.persistence.*;
 import pl.gruszm.ZephyrWork.enums.RoleType;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,15 @@ public class User
     @Column(name = "registration_interval")
     private int locationRegistrationInterval;
 
+    @Column(name = "starting_time")
+    private LocalTime startingTime;
+
+    @Column(name = "ending_time")
+    private LocalTime endingTime;
+
+    @Column(name = "force_start_work_session")
+    private boolean forceStartWorkSession;
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private User supervisor;
@@ -55,6 +65,9 @@ public class User
         this.role = RoleType.EMPLOYEE;
         this.hasActiveWorkSession = false;
         this.locationRegistrationInterval = DEFAULT_INTERVAL;
+        this.startingTime = LocalTime.of(8, 0);
+        this.endingTime = LocalTime.of(16, 0);
+        this.forceStartWorkSession = false;
     }
 
     public int getId()
@@ -182,5 +195,35 @@ public class User
     public void setLocationRegistrationInterval(int locationRegistrationInterval)
     {
         this.locationRegistrationInterval = locationRegistrationInterval;
+    }
+
+    public LocalTime getStartingTime()
+    {
+        return startingTime;
+    }
+
+    public void setStartingTime(LocalTime startingTime)
+    {
+        this.startingTime = startingTime;
+    }
+
+    public LocalTime getEndingTime()
+    {
+        return endingTime;
+    }
+
+    public void setEndingTime(LocalTime endingTime)
+    {
+        this.endingTime = endingTime;
+    }
+
+    public boolean isForceStartWorkSession()
+    {
+        return forceStartWorkSession;
+    }
+
+    public void setForceStartWorkSession(boolean forceStartWorkSession)
+    {
+        this.forceStartWorkSession = forceStartWorkSession;
     }
 }

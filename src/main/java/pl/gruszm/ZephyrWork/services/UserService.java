@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
+import pl.gruszm.ZephyrWork.DTOs.SubordinateEmpDataDTO;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.entities.WorkSession;
@@ -12,6 +13,7 @@ import pl.gruszm.ZephyrWork.repostitories.UserRepository;
 import pl.gruszm.ZephyrWork.repostitories.WorkSessionRepository;
 import pl.gruszm.ZephyrWork.security.UserDetails;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -87,13 +89,7 @@ public class UserService
 
         for (User u : allSupervisors)
         {
-            allSupervisorDTOs.add(new UserDTO()
-                    .setId(u.getId())
-                    .setEmail(u.getEmail())
-                    .setFirstName(u.getFirstName())
-                    .setLastName(u.getLastName())
-                    .setRoleName(u.getRole().name())
-                    .setLocationRegistrationInterval(u.getLocationRegistrationInterval()));
+            allSupervisorDTOs.add(new UserDTO(u));
         }
 
         return allSupervisorDTOs;
@@ -120,14 +116,7 @@ public class UserService
 
         userRelatedWithWorkSession = workSessionOptional.get().getUser();
 
-        userDTO = new UserDTO()
-                .setId(userRelatedWithWorkSession.getId())
-                .setEmail(userRelatedWithWorkSession.getEmail())
-                .setFirstName(userRelatedWithWorkSession.getFirstName())
-                .setLastName(userRelatedWithWorkSession.getLastName())
-                .setRoleName(userRelatedWithWorkSession.getRole().name())
-                .setSupervisorId((userRelatedWithWorkSession.getSupervisor() == null) ? null : userRelatedWithWorkSession.getSupervisor().getId())
-                .setLocationRegistrationInterval(userRelatedWithWorkSession.getLocationRegistrationInterval());
+        userDTO = new UserDTO(userRelatedWithWorkSession);
 
         return userDTO;
     }
@@ -135,22 +124,17 @@ public class UserService
     public List<UserDTO> findSubordinates(User user)
     {
         List<User> users = userRepository.findSubordinatesBySupervisorEmail(user.getEmail());
-        List<UserDTO> userDTOs = users.stream().map(u -> new UserDTO()
-                .setId(u.getId())
-                .setEmail(u.getEmail())
-                .setSupervisorId(u.getSupervisor().getId())
-                .setRoleName(u.getRole().name())
-                .setFirstName(u.getFirstName())
-                .setLastName(u.getLastName())
-                .setLocationRegistrationInterval(u.getLocationRegistrationInterval())
-        ).toList();
+        List<UserDTO> userDTOs = users.stream().map(u -> new UserDTO(u)).toList();
 
         return userDTOs;
     }
 
-    public User setInterval(User employeeToUpdate, int interval)
+    public User updateEmployeeSettings(User employeeToUpdate, SubordinateEmpDataDTO subordinateEmpDataDTO)
     {
-        employeeToUpdate.setLocationRegistrationInterval(interval);
+        employeeToUpdate.setStartingTime(LocalTime.of(subordinateEmpDataDTO.getStartingHour(), subordinateEmpDataDTO.getStartingMinute()));
+        employeeToUpdate.setEndingTime(LocalTime.of(subordinateEmpDataDTO.getEndingHour(), subordinateEmpDataDTO.getEndingMinute()));
+        employeeToUpdate.setLocationRegistrationInterval(subordinateEmpDataDTO.getLocationRegistrationInterval());
+        employeeToUpdate.setForceStartWorkSession(subordinateEmpDataDTO.isForceStartWorkSession());
 
         return userRepository.save(employeeToUpdate);
     }

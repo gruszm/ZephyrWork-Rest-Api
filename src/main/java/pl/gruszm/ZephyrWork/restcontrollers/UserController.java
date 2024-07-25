@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
+import pl.gruszm.ZephyrWork.DTOs.SubordinateEmpDataDTO;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.enums.RoleType;
@@ -30,10 +31,10 @@ public class UserController
         this.userService = userService;
     }
 
-    @GetMapping("/subordinates/interval/{employeeId}/{interval}")
-    public ResponseEntity<Void> setEmployeeLocationRegistrationInterval(@PathVariable("employeeId") int employeeId,
-                                                                        @PathVariable("interval") int interval,
-                                                                        @RequestHeader("Auth") String jwt)
+    @PutMapping("/subordinates/update/{employeeId}")
+    public ResponseEntity<Void> updateEmployeeSettings(@PathVariable("employeeId") int employeeId,
+                                                       @RequestHeader("Auth") String jwt,
+                                                       @RequestBody SubordinateEmpDataDTO subordinateEmpDataDTO)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         User supervisor, employeeToUpdate, updatedEmployee;
@@ -63,7 +64,7 @@ public class UserController
                     .build();
         }
 
-        updatedEmployee = userService.setInterval(employeeToUpdate, interval);
+        updatedEmployee = userService.updateEmployeeSettings(employeeToUpdate, subordinateEmpDataDTO);
 
         if (updatedEmployee == null)
         {
@@ -130,14 +131,7 @@ public class UserController
 
         user = userService.findByEmail(userDetails.getEmail());
 
-        userDTO = new UserDTO()
-                .setId(user.getId())
-                .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName())
-                .setEmail(user.getEmail())
-                .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
-                .setRoleName(user.getRole().name())
-                .setLocationRegistrationInterval(user.getLocationRegistrationInterval());
+        userDTO = new UserDTO(user);
 
         return ResponseEntity.ok(userDTO);
     }
@@ -167,12 +161,7 @@ public class UserController
 
         supervisor = user.getSupervisor();
 
-        supervisorDTO = new UserDTO()
-                .setId(supervisor.getId())
-                .setFirstName(supervisor.getFirstName())
-                .setLastName(supervisor.getLastName())
-                .setEmail(supervisor.getEmail())
-                .setSupervisorId(supervisor.getId());
+        supervisorDTO = new UserDTO(supervisor);
 
         return ResponseEntity.ok(supervisorDTO);
     }
