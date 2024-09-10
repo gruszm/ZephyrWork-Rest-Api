@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.gruszm.ZephyrWork.DTOs.RegistrationDTO;
+import pl.gruszm.ZephyrWork.DTOs.SubordinateEmpDataDTO;
 import pl.gruszm.ZephyrWork.DTOs.UserDTO;
 import pl.gruszm.ZephyrWork.entities.User;
 import pl.gruszm.ZephyrWork.enums.RoleType;
@@ -30,10 +31,58 @@ public class UserController
         this.userService = userService;
     }
 
-    @GetMapping("/subordinates/interval/{employeeId}/{interval}")
-    public ResponseEntity<Void> setEmployeeLocationRegistrationInterval(@PathVariable("employeeId") int employeeId,
-                                                                        @PathVariable("interval") int interval,
-                                                                        @RequestHeader("Auth") String jwt)
+    @DeleteMapping("/subordinates/{employeeId}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("employeeId") int employeeId,
+                                               @RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User supervisor, employeeToDelete, deletedEmployee;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        supervisor = userService.findByEmail(userDetails.getEmail());
+
+        if ((supervisor == null) || (supervisor.getRole().equals(RoleType.EMPLOYEE)))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        employeeToDelete = userService.findById(employeeId);
+
+        if (employeeToDelete == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+
+        deletedEmployee = userService.deleteUser(supervisor, employeeToDelete);
+
+        if (deletedEmployee == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity
+                    .ok()
+                    .build();
+        }
+    }
+
+    @PutMapping("/subordinates/update/{employeeId}")
+    public ResponseEntity<Void> updateEmployeeSettings(@PathVariable("employeeId") int employeeId,
+                                                       @RequestHeader("Auth") String jwt,
+                                                       @RequestBody SubordinateEmpDataDTO subordinateEmpDataDTO)
     {
         UserDetails userDetails = jwtUtils.readToken(jwt);
         User supervisor, employeeToUpdate, updatedEmployee;
@@ -63,7 +112,7 @@ public class UserController
                     .build();
         }
 
-        updatedEmployee = userService.setInterval(employeeToUpdate, interval);
+        updatedEmployee = userService.updateEmployeeSettings(employeeToUpdate, subordinateEmpDataDTO);
 
         if (updatedEmployee == null)
         {
@@ -130,14 +179,7 @@ public class UserController
 
         user = userService.findByEmail(userDetails.getEmail());
 
-        userDTO = new UserDTO()
-                .setId(user.getId())
-                .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName())
-                .setEmail(user.getEmail())
-                .setSupervisorId((user.getSupervisor() != null) ? user.getSupervisor().getId() : null)
-                .setRoleName(user.getRole().name())
-                .setLocationRegistrationInterval(user.getLocationRegistrationInterval());
+        userDTO = new UserDTO(user);
 
         return ResponseEntity.ok(userDTO);
     }
@@ -167,12 +209,7 @@ public class UserController
 
         supervisor = user.getSupervisor();
 
-        supervisorDTO = new UserDTO()
-                .setId(supervisor.getId())
-                .setFirstName(supervisor.getFirstName())
-                .setLastName(supervisor.getLastName())
-                .setEmail(supervisor.getEmail())
-                .setSupervisorId(supervisor.getId());
+        supervisorDTO = new UserDTO(supervisor);
 
         return ResponseEntity.ok(supervisorDTO);
     }
