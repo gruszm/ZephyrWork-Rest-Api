@@ -263,11 +263,17 @@ public class WorkSessionController
         workSession = workSessionService.startWorkSessionForUser(userDetails.getEmail());
         interval = userService.getLocationRegistrationInterval(userDetails.getEmail());
 
-        if ((workSession == null) || (interval == -1))
+        if (interval == -1)
         {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
+        }
+        else if (workSession == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(interval);
         }
         else
         {

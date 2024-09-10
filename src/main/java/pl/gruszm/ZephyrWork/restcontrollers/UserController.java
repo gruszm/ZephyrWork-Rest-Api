@@ -31,6 +31,54 @@ public class UserController
         this.userService = userService;
     }
 
+    @DeleteMapping("/subordinates/{employeeId}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("employeeId") int employeeId,
+                                               @RequestHeader("Auth") String jwt)
+    {
+        UserDetails userDetails = jwtUtils.readToken(jwt);
+        User supervisor, employeeToDelete, deletedEmployee;
+
+        if (userDetails == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        supervisor = userService.findByEmail(userDetails.getEmail());
+
+        if ((supervisor == null) || (supervisor.getRole().equals(RoleType.EMPLOYEE)))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+
+        employeeToDelete = userService.findById(employeeId);
+
+        if (employeeToDelete == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+
+        deletedEmployee = userService.deleteUser(supervisor, employeeToDelete);
+
+        if (deletedEmployee == null)
+        {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        else
+        {
+            return ResponseEntity
+                    .ok()
+                    .build();
+        }
+    }
+
     @PutMapping("/subordinates/update/{employeeId}")
     public ResponseEntity<Void> updateEmployeeSettings(@PathVariable("employeeId") int employeeId,
                                                        @RequestHeader("Auth") String jwt,

@@ -42,6 +42,21 @@ public class UserService
         return userRepository.findByEmail(email);
     }
 
+    public User deleteUser(User requestingUser, User userToDelete)
+    {
+        List<User> subordinatesList = userRepository.findSubordinatesBySupervisorEmail(userToDelete.getEmail());
+
+        if (subordinatesList != null && !subordinatesList.isEmpty())
+        {
+            subordinatesList.forEach(s -> s.setSupervisor(requestingUser));
+            userRepository.saveAll(subordinatesList);
+        }
+
+        userRepository.delete(userToDelete);
+
+        return userToDelete;
+    }
+
     public User processRegistration(UserDetails registeringUserDetails, RegistrationDTO registrationDTO)
     {
         User registeringUser, supervisor, newUser;
